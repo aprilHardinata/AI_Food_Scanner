@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../database/db_helper.dart'; // Sesuaikan path jika berbeda
+import '../database/db_helper.dart';
 import '../models/food_item.dart';
 import '../providers/cart_provider.dart';
+import 'cart_screen.dart'; 
 
 class CatalogScreen extends StatefulWidget {
   @override
@@ -26,20 +27,31 @@ class _CatalogScreenState extends State<CatalogScreen> {
       appBar: AppBar(
         title: Text('Katalog Makanan'),
         actions: [
-          // Indikator jumlah barang di keranjang pojok kanan atas
           Consumer<CartProvider>(
             builder: (context, cart, child) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Center(
-                  child: Text(
-                    '🛒 ${cart.cartItems.length}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              return GestureDetector(
+                onTap: () {
+                  // Navigasi ke halaman CartScreen saat ikon diklik
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CartScreen()),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: Text(
+                      '🛒 ${cart.cartItems.length}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               );
             },
-          )
+          ),
         ],
       ),
       body: FutureBuilder<List<FoodItem>>(
@@ -67,7 +79,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
               return Card(
                 margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListTile(
-                  title: Text(food.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                  title: Text(
+                    food.name,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   subtitle: Text(
                     '${food.calories} kcal | P: ${food.protein}g | K: ${food.carbs}g | L: ${food.fat}g\nKat: ${food.category}',
                   ),
@@ -76,7 +91,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
                     icon: Icon(Icons.add_circle, color: Colors.green, size: 32),
                     onPressed: () {
                       // Action: Kirim data makanan ini ke CartProvider
-                      Provider.of<CartProvider>(context, listen: false).addItem(food);
+                      Provider.of<CartProvider>(
+                        context,
+                        listen: false,
+                      ).addItem(food);
 
                       // Feedback visual berupa SnackBar di bawah layar
                       ScaffoldMessenger.of(context).showSnackBar(
