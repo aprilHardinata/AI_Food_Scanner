@@ -66,4 +66,13 @@ class DBHelper {
       whereArgs: [id],
     );
   }
+  Future<bool> checkFoodExists(String foodName) async {
+    final db = await database;
+    final result = await db.query(
+      'food_items',
+      where: 'LOWER(name) = ?',
+      whereArgs: [foodName.toLowerCase()],
+    );
+    return result.isNotEmpty;
+  }
 }
