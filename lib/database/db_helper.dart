@@ -66,6 +66,7 @@ class DBHelper {
       whereArgs: [id],
     );
   }
+
   Future<bool> checkFoodExists(String foodName) async {
     final db = await database;
     final result = await db.query(
@@ -75,4 +76,5 @@ class DBHelper {
     );
     return result.isNotEmpty;
   }
+  
 }
