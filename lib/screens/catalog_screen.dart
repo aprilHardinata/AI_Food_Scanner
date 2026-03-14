@@ -127,7 +127,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Katalog kosong. Tekan tombol + untuk menambahkan makanan.'));
+            return const Center(child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Katalog kosong. Tekan tombol + untuk menambahkan makanan.'
+                , textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+            ));
           }
 
           final foods = snapshot.data!;
