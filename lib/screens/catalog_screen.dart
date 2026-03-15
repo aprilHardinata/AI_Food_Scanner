@@ -43,10 +43,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Nama Makanan (Cth: Apel)')),
-              TextField(controller: _calCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Kalori (kcal)')),
-              TextField(controller: _proCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Protein (g)')),
-              TextField(controller: _carbCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Karbohidrat (g)')),
-              TextField(controller: _fatCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Lemak (g)')),
+              // Tambahan opsional: helperText agar user tahu format yang benar
+              TextField(controller: _calCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Kalori', helperText: 'Isi angka saja, misal: 95')),
+              TextField(controller: _proCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Protein', helperText: 'Isi angka saja, misal: 0.5')),
+              TextField(controller: _carbCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Karbohidrat', helperText: 'Isi angka saja, misal: 25')),
+              TextField(controller: _fatCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Lemak', helperText: 'Isi angka saja, misal: 0.3')),
             ],
           ),
         ),
@@ -54,31 +55,62 @@ class _CatalogScreenState extends State<CatalogScreen> {
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
           ElevatedButton(
             onPressed: () async {
+              // Ambil semua teks dan bersihkan spasi berlebih
               String name = _nameCtrl.text.trim();
-              if (name.isEmpty) return; // Cegah simpan jika nama kosong
+              String calText = _calCtrl.text.trim();
+              String proText = _proCtrl.text.trim();
+              String carbText = _carbCtrl.text.trim();
+              String fatText = _fatCtrl.text.trim();
 
-              // 1. CEK DUPLIKAT DI DATABASE
+              // --- 1. VALIDASI KOSONG ---
+              if (name.isEmpty || calText.isEmpty || proText.isEmpty || carbText.isEmpty || fatText.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Gagal: Semua kolom wajib diisi!'), backgroundColor: Colors.red),
+                );
+                return; // Hentikan proses
+              }
+
+              // --- 2. VALIDASI ANGKA (PENCEGAH ERROR SATUAN) ---
+              // Coba konversi teks menjadi angka desimal (double)
+              double? cal = double.tryParse(calText);
+              double? pro = double.tryParse(proText);
+              double? carb = double.tryParse(carbText);
+              double? fat = double.tryParse(fatText);
+
+              // Jika salah satu gagal dikonversi (karena ada huruf/simbol), nilainya akan null
+              if (cal == null || pro == null || carb == null || fat == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Gagal: Nilai gizi wajib berupa angka murni (jangan ketik "gram" atau "kcal")!'), 
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+                return; // Hentikan proses, biarkan form tetap terbuka agar user bisa memperbaiki
+              }
+
+              // --- 3. VALIDASI DUPLIKAT ---
               bool isExists = await DBHelper().checkFoodExists(name);
               if (isExists) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Gagal: "$name" sudah ada di katalog!'), backgroundColor: Colors.red),
                 );
-                return; // Hentikan proses simpan
+                return; // Hentikan proses
               }
 
-              // 2. JIKA BELUM ADA, SIMPAN KE DATABASE
+              // --- 4. JIKA SEMUA VALIDASI LOLOS, SIMPAN KE DATABASE ---
               FoodItem newItem = FoodItem(
                 name: name,
-                calories: double.tryParse(_calCtrl.text) ?? 0,
-                protein: double.tryParse(_proCtrl.text) ?? 0,
-                carbs: double.tryParse(_carbCtrl.text) ?? 0,
-                fat: double.tryParse(_fatCtrl.text) ?? 0,
-                category: 'Kustom', // Kategori default untuk buatan user
+                calories: cal,
+                protein: pro,
+                carbs: carb,
+                fat: fat,
+                category: 'Kustom', 
               );
 
               await DBHelper().insertFoodItem(newItem);
 
-              // 3. TUTUP POP-UP & REFRESH LAYAR
+              // Tutup Pop-up & Refresh Layar
               Navigator.pop(ctx);
               _refreshKatalog();
               

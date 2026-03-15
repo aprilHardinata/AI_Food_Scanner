@@ -61,7 +61,7 @@ class DBHelper {
     );
   }
 
-  //belum dipakai, tapi bisa digunakan untuk menghapus data makanan jika diperlukan
+  // Fungsi untuk menghapus item makanan dari database
   Future<int> deleteFoodItem(int id) async {
     final db = await database;
     return await db.delete(
