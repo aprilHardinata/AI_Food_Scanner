@@ -145,6 +145,44 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 child: ListTile(
                   title: Text(food.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('${food.calories} kcal | P: ${food.protein}g | K: ${food.carbs}g | L: ${food.fat}g'),
+                  isThreeLine: true,
+
+                  onLongPress: () {
+                    showDialog(
+                      context: context, 
+                      builder: (ctx) => AlertDialog(
+                        content: Text('Apakah anda yakin ingin mengahapus "${food.name}" dari katalog'),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(ctx), 
+                          child: const Text('Batal'),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                            onPressed: () async {
+                              // 1. Eksekusi hapus data dari SQLite berdasarkan ID
+                              if (food.id != null) {
+                                await DBHelper().deleteFoodItem(food.id!);
+                              }
+                              
+                              // 2. Tutup pop-up
+                              Navigator.pop(ctx);
+                              
+                              // 3. Refresh ulang UI Katalog agar itemnya hilang dari layar
+                              _refreshKatalog();
+                              
+                              // 4. Tampilkan pesan sukses
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('${food.name} berhasil dihapus!'),
+                                  backgroundColor: Colors.redAccent,
+                                ),
+                              );
+                            },
+                            child: const Text('Hapus', style: TextStyle(color: Colors.white)),
+                          ),
+                        ],
+                      ));
+                  },
                   trailing: IconButton(
                     icon: const Icon(Icons.add_circle, color: Colors.green, size: 32),
                     onPressed: () {

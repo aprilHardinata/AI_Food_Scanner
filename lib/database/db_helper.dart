@@ -36,11 +36,13 @@ class DBHelper {
     ''');
   }
 
+  // Fungsi untuk menambahkan item makanan ke database
   Future<int> insertFoodItem(FoodItem item) async {
     final db = await database;
     return await db.insert('food_items', item.toMap());
   }
 
+  //belum dipakai, tapi bisa digunakan untuk mengambil semua data makanan jika diperlukan
   Future<List<FoodItem>> getFoodItems() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('food_items');
@@ -48,6 +50,7 @@ class DBHelper {
     return maps.map((json) => FoodItem.fromMap(json)).toList();
   }
 
+  //belum dipakai, tapi bisa digunakan untuk update data makanan jika diperlukan
   Future<int> updateFoodItem(FoodItem item) async {
     final db = await database;
     return await db.update(
@@ -58,6 +61,7 @@ class DBHelper {
     );
   }
 
+  //belum dipakai, tapi bisa digunakan untuk menghapus data makanan jika diperlukan
   Future<int> deleteFoodItem(int id) async {
     final db = await database;
     return await db.delete(
@@ -67,6 +71,7 @@ class DBHelper {
     );
   }
 
+  // Fungsi untuk memeriksa apakah makanan dengan nama tertentu sudah ada di database
   Future<bool> checkFoodExists(String foodName) async {
     final db = await database;
     final result = await db.query(
