@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class AiService {
   static Future<String> sendChatToAI(String userMessage) async {
     // Update URL dengan IP WiFi yang benar
-    final url = Uri.parse('http://192.168.100.138:8000/chat');
+    final url = Uri.parse('http://192.168.0.101:8000/chat');
 
     try {
       final response = await http.post(

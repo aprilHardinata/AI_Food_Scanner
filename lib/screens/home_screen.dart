@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import 'catalog_screen.dart';
 import 'cart_screen.dart';
-import '../widgets/ai_chat_sidebar.dart'; // 1. Import sidebar yang baru dibuat
+import '../widgets/chat_ai_sidebar.dart'; 
 
 class HomeScreen extends StatelessWidget {
   @override
