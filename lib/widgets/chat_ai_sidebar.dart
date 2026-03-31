@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/ai_services.dart'; // Pastikan path import ini sesuai dengan foldermu
+import '../services/ai_service.dart'; // Pastikan path import ini sesuai dengan foldermu
 
 class AiChatSidebar extends StatefulWidget {
   const AiChatSidebar({Key? key}) : super(key: key);

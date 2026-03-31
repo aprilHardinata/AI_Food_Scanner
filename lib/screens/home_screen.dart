@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import 'catalog_screen.dart';
 import 'cart_screen.dart';
+import '../widgets/ai_chat_sidebar.dart'; // 1. Import sidebar yang baru dibuat
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -17,6 +18,25 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
+      
+      // 2. Daftarkan UI Chat sebagai End Drawer (muncul dari kanan)
+      endDrawer: const AiChatSidebar(), 
+      
+      // 3. Tambahkan Floating Action Button (FAB)
+      // Kita bungkus dengan Builder agar tombol ini tahu posisi Scaffold untuk membuka laci/drawer-nya
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton(
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+            onPressed: () {
+              // Perintah untuk menggeser sidebar keluar
+              Scaffold.of(context).openEndDrawer(); 
+            },
+          );
+        }
+      ),
+
       body: Consumer<CartProvider>(
         builder: (context, cart, child) {
           // Menghitung persentase bar (maksimal 1.0 atau 100%)
@@ -75,9 +95,6 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        
-      }),
     );
   }
 
