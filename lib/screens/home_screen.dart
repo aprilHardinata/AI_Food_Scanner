@@ -75,21 +75,24 @@ class HomeScreen extends StatelessWidget {
                 const Spacer(), // Mendorong tombol ke paling bawah
 
                 // --- TOMBOL KE KATALOG ---
-                SizedBox(
-                  width: double.infinity,
-                  height: 55,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.restaurant_menu),
-                    label: const Text('Tambah Makanan', style: TextStyle(fontSize: 18)),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                Padding(
+                  padding: const EdgeInsets.only(right: 80.0), // Sisakan ruang di kanan untuk FAB
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.restaurant_menu),
+                      label: const Text('Tambah Makanan', style: TextStyle(fontSize: 18)),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => CatalogScreen()));
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => CatalogScreen()));
-                    },
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 23), 
               ],
             ),
           );

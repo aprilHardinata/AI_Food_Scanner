@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AiService {
-  static Future<String> sendChatToAI(String userMessage, {String threadId = "default_thread"}) async {
+  static Future<String> sendChatToAI(String userMessage, {String threadId = "default_thread", String? base64Image}) async {
     // Update URL dengan IP WiFi yang benar
     final url = Uri.parse('http://192.168.0.100:8000/chat');
 
@@ -16,6 +16,7 @@ class AiService {
         body: jsonEncode({
           'message': userMessage,
           'thread_id': threadId,
+          if (base64Image != null) 'image_base64': base64Image,
         }),
       );
 

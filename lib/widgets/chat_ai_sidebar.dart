@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../services/ai_service.dart'; // Pastikan path import ini sesuai dengan foldermu
 
 class AiChatSidebar extends StatefulWidget {
@@ -29,6 +31,32 @@ class _AiChatSidebarState extends State<AiChatSidebar> {
     String aiResponse = await AiService.sendChatToAI(userText);
 
     // Tampilkan balasan AI di layar
+    setState(() {
+      _messages.add({'role': 'ai', 'text': aiResponse});
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _pickAndSendImage() async {
+    final picker = ImagePicker();
+    // Membuka kamera (bisa ganti ImageSource.gallery untuk galeri)
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile == null) return;
+
+    final bytes = await pickedFile.readAsBytes();
+    final base64Image = base64Encode(bytes);
+
+    setState(() {
+      _messages.add({'role': 'user', 'text': '📸 [Gambar dikirim]'});
+      _isLoading = true;
+    });
+
+    // Panggil API Python dengan gambar
+    String aiResponse = await AiService.sendChatToAI(
+      "Tolong analisa gambar makanan ini dan perkirakan kalorinya.",
+      base64Image: base64Image,
+    );
+
     setState(() {
       _messages.add({'role': 'ai', 'text': aiResponse});
       _isLoading = false;
@@ -101,6 +129,10 @@ class _AiChatSidebarState extends State<AiChatSidebar> {
               padding: const EdgeInsets.all(12.0),
               child: Row(
                 children: [
+                  IconButton(
+                    icon: const Icon(Icons.camera_alt, color: Colors.green, size: 28),
+                    onPressed: _pickAndSendImage,
+                  ),
                   Expanded(
                     child: TextField(
                       controller: _controller,
