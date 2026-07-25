@@ -68,10 +68,12 @@ class _AiChatSidebarState extends State<AiChatSidebar> {
     // Membatasi lebar agar cuma jadi "Side bar" (sekitar 75% layar)
     return Drawer(
       width: MediaQuery.of(context).size.width * 0.75, 
-      child: SafeArea(
-        child: Column(
-          children: [
-            // --- HEADER SIDEBAR ---
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // --- HEADER SIDEBAR ---
             Container(
               padding: const EdgeInsets.all(16),
               color: Colors.green, // Disesuaikan dengan tema aplikasi nutrisi
@@ -157,6 +159,7 @@ class _AiChatSidebarState extends State<AiChatSidebar> {
             )
           ],
         ),
+      ),
       ),
     );
   }
