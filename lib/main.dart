@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthy_ai_scanner/screens/home_screen.dart';
+import 'package:healthy_ai_scanner/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 // Import Provider dan Screen yang sudah kita buat
@@ -35,7 +35,7 @@ class NutritionTrackerApp extends StatelessWidget {
           ),
         ),
         // Menjadikan CatalogScreen sebagai halaman pertama yang muncul
-        home: HomeScreen(), 
+        home: const MainScreen(), 
       ),
     );
   }
