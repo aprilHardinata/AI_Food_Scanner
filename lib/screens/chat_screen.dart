@@ -27,7 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _controller.clear();
     });
 
-    // Panggil API Python kamu
+    // Panggil API Python 
     String aiResponse = await AiService.sendChatToAI(userText);
 
     // Tampilkan balasan AI di layar

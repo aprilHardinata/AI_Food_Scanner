@@ -8,6 +8,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Jurnal Nutrisi Harian'),
+        backgroundColor: Colors.green,
         actions: [
           // Tombol untuk mengosongkan semua daftar
           IconButton(

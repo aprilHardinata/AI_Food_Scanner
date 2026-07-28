@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import 'catalog_screen.dart';
-import 'cart_screen.dart';
  
 
 class HomeScreen extends StatelessWidget {
@@ -11,16 +10,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard Nutrisi'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.receipt_long),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CartScreen())),
-          )
-        ],
+        backgroundColor: Colors.green,
       ),
       
-
-
       body: Consumer<CartProvider>(
         builder: (context, cart, child) {
           // Menghitung persentase bar (maksimal 1.0 atau 100%)
