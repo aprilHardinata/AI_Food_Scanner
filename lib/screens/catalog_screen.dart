@@ -4,6 +4,7 @@ import '../database/db_helper.dart';
 import '../models/food_item.dart';
 import '../providers/cart_provider.dart';
 import 'cart_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CatalogScreen extends StatefulWidget {
   @override
@@ -17,6 +18,55 @@ class _CatalogScreenState extends State<CatalogScreen> {
   void initState() {
     super.initState();
     _refreshKatalog(); // Panggil fungsi refresh saat pertama kali buka
+    _checkAndShowGuide(); // Cek apakah panduan sudah pernah ditampilkan
+  }
+
+  Future<void> _checkAndShowGuide() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool hasSeenGuide = prefs.getBool('hasSeenCatalogGuide') ?? false;
+
+    if (!hasSeenGuide) {
+      // Munculkan popup panduan jika belum pernah
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showGuideDialog(prefs);
+      });
+    }
+  }
+
+  // --- FUNGSI MUNCULKAN POP-UP PANDUAN ---
+  void _showGuideDialog(SharedPreferences prefs) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Memaksa user untuk klik tombol Mengerti
+      builder: (ctx) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.lightbulb, color: Colors.orange),
+            SizedBox(width: 8),
+            Text('Panduan Katalog'),
+          ],
+        ),
+        content: const Text(
+          'Untuk mempermudah pencatatan nutrisi Anda, silakan tambahkan data makanan yang paling sering Anda konsumsi dengan menekan tombol (+) di pojok kanan bawah.',
+          style: TextStyle(height: 1.4),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              // Simpan status bahwa user sudah melihat panduan ini
+              prefs.setBool('hasSeenCatalogGuide', true);
+              Navigator.pop(ctx);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: const Text('Mengerti', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
   }
 
   // Fungsi untuk memuat ulang data dari SQLite
