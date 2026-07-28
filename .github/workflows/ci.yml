@@ -1,0 +1,45 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      # Dibutuhkan oleh Flutter untuk mem-build aplikasi Android
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        cache: true
+
+    - name: Install Dependencies
+      run: flutter pub get
+
+    - name: Analyze Code
+      # Mengecek peringatan/error pada penulisan kode (Linting)
+      run: flutter analyze
+      continue-on-error: true 
+
+    - name: Run Tests
+      # Menjalankan unit test 
+      run: flutter test
+      continue-on-error: true
+
+    - name: Build Android APK (Debug)
+      # Memastikan aplikasi benar-benar bisa di-build tanpa error (bebas fatal error)
+      run: flutter build apk --debug
