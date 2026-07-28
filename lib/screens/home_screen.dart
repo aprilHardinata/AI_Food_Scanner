@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
-import 'catalog_screen.dart';
+
  
 
 class HomeScreen extends StatelessWidget {
@@ -48,27 +48,7 @@ class HomeScreen extends StatelessWidget {
                   unit: 'g',
                 ),
                 
-                const Spacer(), // Mendorong tombol ke paling bawah
 
-                // --- TOMBOL KE KATALOG ---
-                Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.restaurant_menu),
-                      label: const Text('Tambah Makanan', style: TextStyle(fontSize: 18)),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => CatalogScreen()));
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 23), 
               ],
             ),
           );

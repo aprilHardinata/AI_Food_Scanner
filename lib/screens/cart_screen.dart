@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import 'catalog_screen.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -24,11 +25,27 @@ class CartScreen extends StatelessWidget {
         builder: (context, cart, child) {
           // Jika keranjang kosong
           if (cart.cartItems.isEmpty) {
-            return const Center(
-              child: Text(
-                'Belum ada makanan hari ini.\nYuk tambah dari katalog!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Belum ada makanan hari ini.\nYuk tambah dari katalog!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.restaurant_menu),
+                    label: const Text('Tambah Makanan', style: TextStyle(fontSize: 16)),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => CatalogScreen()));
+                    },
+                  ),
+                ],
               ),
             );
           }
@@ -115,6 +132,23 @@ class CartScreen extends StatelessWidget {
                         ),
                       ),
                       
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.restaurant_menu),
+                        label: const Text('Tambah Makanan', style: TextStyle(fontSize: 16)),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.green,
+                          side: const BorderSide(color: Colors.green),
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => CatalogScreen()));
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
