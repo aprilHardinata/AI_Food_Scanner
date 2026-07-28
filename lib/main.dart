@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_ai_scanner/screens/main_screen.dart';
 import 'package:provider/provider.dart';
-
-// Import Provider dan Screen yang sudah kita buat
 import 'providers/cart_provider.dart';
 
 void main() {
-  // Pastikan binding Flutter sudah siap sebelum menjalankan aplikasi
-  // Ini best practice jika kamu pakai database lokal seperti sqflite
   WidgetsFlutterBinding.ensureInitialized();
   
   runApp(const NutritionTrackerApp());
@@ -25,7 +21,7 @@ class NutritionTrackerApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Smart Nutrition Tracker',
-        debugShowCheckedModeBanner: false, // Menghilangkan pita "DEBUG"
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -34,7 +30,6 @@ class NutritionTrackerApp extends StatelessWidget {
             centerTitle: true,
           ),
         ),
-        // Menjadikan CatalogScreen sebagai halaman pertama yang muncul
         home: const MainScreen(), 
       ),
     );
