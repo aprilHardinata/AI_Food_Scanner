@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-
+  //list of page
   final List<Widget> _screens = [
     HomeScreen(),
     CartScreen(),
